@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "removeComments": true,
+    "sourceMap": true,
+    "outDir": "dist/js",
+    "strict": true
+  },
+  "include": [
+      "src/ts/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
