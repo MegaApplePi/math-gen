@@ -15,6 +15,7 @@
   <title>math-gen</title>
   <style>
     body {
+      counter-set: problemNumber 0;
       margin: 0;
       padding: 0;
       font-family: "Noto Sans", sans-serif;
@@ -34,27 +35,29 @@
       font-family: "Roboto Mono", monospace;
       width: 8rem;
     }
-    .seed__submit {
+    .button {
       appearance: none;
       border: 1px solid #000;
       font: inherit;
     }
-    @media print {
-      .seed__submit {
-        display: none;
-      }
-    }
     .math {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
       margin-top: 1rem;
     }
     .problem {
+      counter-increment: problemNumber;
       display: inline-flex;
       margin-bottom: 2.5rem;
-      width: 9rem;
+      width: 11rem;
       justify-content: flex-start;
+      position: relative;
+    }
+    .problem::before {
+      content: "(#" counter(problemNumber) ")";
+      display: inline-block;
+      margin-right: 4px;
+      font-size: 0.75rem;
     }
     .problem-vertical {
       display: inline-flex;
@@ -62,15 +65,37 @@
       width: 4.5rem;
       justify-content: flex-start;
     }
+    .menu {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      width: 100vw;
+      background-color: #999;
+      color: #fff;
+      padding: 2px 8px;
+    }
+
+    @media print {
+      .seed__submit, .seed__random, .menu {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body class="letter">
+  <div class="menu">
+    <div>
+      <label>Number of Problems: <input type="number" min="0"/></label>
+      <input type="button" class="button menu__answers" value="Answers" />
+    </div>
+  </div>
   <section class="page sheet padding-10mm">
     <div class="seed">
       <label>
         <span>SEED:</span>
         <input type="text" class="seed__input" maxlength="16" />
-        <input type="button" class="seed__submit" value="Set Seed" />
+        <input type="button" class="button seed__submit" value="Set Seed" />
+        <input type="button" class="button seed__random" value="Random Seed" />
       </label>
     </div>
     <div class="math"></div>

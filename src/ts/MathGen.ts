@@ -1,7 +1,11 @@
 import Prando from 'prando';
 
 class MathGen {
-  private Prando: Prando;
+  private _prando: Prando;
+  public get Prando(): Prando {
+    return this._prando;
+  }
+
   private _seed: string;
 
   public get seed() {
@@ -22,27 +26,27 @@ class MathGen {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     this._seed = urlSearchParams.get("seed")?.substr(0, 16) ?? new Prando().nextString(16);
-    this.Prando = new Prando(this._seed);
+    this._prando = new Prando(this._seed);
   }
 
   public mkAddition(): string {
-    return `${this.Prando.nextInt(1, 99)} + ${this.Prando.nextInt(1, 99)} =`;
+    return `${this._prando.nextInt(1, 99)} + ${this._prando.nextInt(1, 99)} =`;
   }
 
   public mkAdditionVertical(): string {
-    return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{+ ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
+    return `\\begin{aligned}${this._prando.nextInt(1, 99)}& \\\\ \\underline{+ ${this._prando.nextInt(1, 99)}}&\\end{aligned}`;
   }
 
   public mkSubtraction(): string {
-    return `${this.Prando.nextInt(1, 99)} - ${this.Prando.nextInt(1, 99)} =`;
+    return `${this._prando.nextInt(1, 99)} - ${this._prando.nextInt(1, 99)} =`;
   }
 
   public mkSubtractionVertical(): string {
-    return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{- ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
+    return `\\begin{aligned}${this._prando.nextInt(1, 99)}& \\\\ \\underline{- ${this._prando.nextInt(1, 99)}}&\\end{aligned}`;
   }
 
   public mkMultiplication(): string {
-    return `${this.Prando.nextInt(1, 99)} \\times ${this.Prando.nextInt(1, 99)} =`;
+    return `${this._prando.nextInt(1, 99)} \\times ${this._prando.nextInt(1, 99)} =`;
   }
 }
 
