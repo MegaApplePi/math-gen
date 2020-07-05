@@ -25,19 +25,24 @@ class MathGen {
     this.Prando = new Prando(this._seed);
   }
 
-  public mkAddition(vertical: boolean = false): string {
-    if (vertical) {
-      return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{+ ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
-      // return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{+ \\quad${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
-    }
+  public mkAddition(): string {
     return `${this.Prando.nextInt(1, 99)} + ${this.Prando.nextInt(1, 99)} =`;
   }
 
-  public mkSubtraction(vertical: boolean = false): string {
-    if (vertical) {
-      return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{- ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
-    }
+  public mkAdditionVertical(): string {
+    return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{+ ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
+  }
+
+  public mkSubtraction(): string {
     return `${this.Prando.nextInt(1, 99)} - ${this.Prando.nextInt(1, 99)} =`;
+  }
+
+  public mkSubtractionVertical(): string {
+    return `\\begin{aligned}${this.Prando.nextInt(1, 99)}& \\\\ \\underline{- ${this.Prando.nextInt(1, 99)}}&\\end{aligned}`;
+  }
+
+  public mkMultiplication(): string {
+    return `${this.Prando.nextInt(1, 99)} \\times ${this.Prando.nextInt(1, 99)} =`;
   }
 }
 

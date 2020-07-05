@@ -19,12 +19,12 @@ $seedInput?.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
     setSeed();
   }
-})
+});
 $seedSubmit?.addEventListener("click", setSeed);
 
 for (let i = 0; i < 20; i++) {
   let $div = document.createElement("div");
   $div.classList.add("problem");
-  katex.render(MathGen.mkAddition(), $div);
+  katex.render(MathGen.mkMultiplication(), $div);
   $math?.insertAdjacentElement("beforeend", $div);
 }
