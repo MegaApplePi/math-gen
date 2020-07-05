@@ -2,7 +2,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "php -S localhost:8080 & webpack --watch --progress"
+    "dev": "webpack --watch --progress"
   },
   "author": "",
   "license": "MIT",

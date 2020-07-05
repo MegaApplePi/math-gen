@@ -41,41 +41,32 @@ $menuAnswers?.addEventListener("click", getAnswers);
 // Generate random math problems
 let $div: HTMLDivElement;
 for (let i = 0; i < 28; i++) {
-  let thisLine = MathGen.Prando.nextInt(0, 3);
+  let thisLine = MathGen.Prando.nextInt(0, 4);
+  $div = document.createElement("div");
+  $div.classList.add("problem");
+  if (MathGen.answersMode) {
+    $div.classList.add("problem--answer");
+  }
+
   switch (thisLine) {
     case 0:
-      $div = document.createElement("div");
-      $div.classList.add("problem");
       katex.render(MathGen.mkAddition(), $div);
-      $math?.insertAdjacentElement("beforeend", $div);
       break;
     case 1:
-      $div = document.createElement("div");
-      $div.classList.add("problem");
       katex.render(MathGen.mkSubtraction(), $div);
-      $math?.insertAdjacentElement("beforeend", $div);
       break;
     case 2:
-      $div = document.createElement("div");
-      $div.classList.add("problem");
       katex.render(MathGen.mkMultiplication(), $div);
-      $math?.insertAdjacentElement("beforeend", $div);
       break;
     case 3:
-      $div = document.createElement("div");
-      $div.classList.add("problem");
       katex.render(MathGen.mkDivision(), $div);
-      $math?.insertAdjacentElement("beforeend", $div);
+      break;
+    case 4:
+      katex.render(MathGen.mkDivisionWithFraction(), $div);
       break;
     default:
+      katex.render("???", $div);
       break;
   }
-}
-
-/* for (let i = 0; i < 20; i++) {
-  let $div = document.createElement("div");
-  $div.classList.add("problem");
-  katex.render(MathGen.mkMultiplication(), $div);
   $math?.insertAdjacentElement("beforeend", $div);
 }
- */

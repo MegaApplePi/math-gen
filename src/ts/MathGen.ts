@@ -7,7 +7,10 @@ class MathGen {
   }
 
   private _seed: string;
-  private answersMode: boolean;
+  private _answersMode: boolean;
+  public get answersMode(): boolean {
+    return this._answersMode;
+  };
 
   public get seed() {
     return this._seed;
@@ -27,15 +30,15 @@ class MathGen {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     this._seed = urlSearchParams.get("seed")?.substr(0, 16) ?? new Prando().nextString(16);
-    this.answersMode = urlSearchParams.has("answers");
+    this._answersMode = urlSearchParams.has("answers");
     this._prando = new Prando(this._seed);
   }
 
   public mkAddition(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this.answersMode) {
-      return `${number1} + ${number2} = \\fcolorbox{#000}{transparent}{${number1 + number2}}`;
+    if (this._answersMode) {
+      return `${number1} + ${number2} = \\boxed{${number1 + number2}}`;
     }
     return `${number1} + ${number2} =`;
   }
@@ -47,8 +50,8 @@ class MathGen {
   public mkSubtraction(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this.answersMode) {
-      return `${number1} - ${number2} = \\fcolorbox{#000}{transparent}{${number1 - number2}}`;
+    if (this._answersMode) {
+      return `${number1} - ${number2} = \\boxed{${number1 - number2}}`;
     }
     return `${number1} - ${number2} =`;
   }
@@ -60,21 +63,39 @@ class MathGen {
   public mkMultiplication(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this.answersMode) {
-      return `${number1} \\times ${number2} = \\fcolorbox{#000}{transparent}{${number1 * number2}}`;
+    if (this._answersMode) {
+      return `${number1} \\times ${number2} = \\boxed{${number1 * number2}}`;
     }
     return `${number1} \\times ${number2} =`;
   }
 
   public mkDivision(): string {
-    let number1 = this._prando.nextInt(1, 99);
-    let number2 = this._prando.nextInt(1, 9);
-    let quotient = number1 * number2;
+    let quotient = this._prando.nextInt(1, 99);
+    let divisor = this._prando.nextInt(1, 10);
+    let dividend = quotient * divisor;
 
-    if (this.answersMode) {
-      return `${quotient} \\div ${number2} = \\fcolorbox{#000}{transparent}{${number1}}`;
+    if (this._answersMode) {
+      return `${dividend} \\div ${divisor} = \\boxed{${quotient}}`;
     }
-    return `${quotient} \\div ${number2} =`;
+    return `${dividend} \\div ${divisor} =`;
+  }
+
+  public mkDivisionWithFraction(): string {
+    let dividend = this._prando.nextInt(1, 99);
+    let divisor = this._prando.nextInt(1, 99);
+    let quotient = Math.floor(dividend / divisor);
+    let remainder = dividend % divisor;
+
+    if (this._answersMode) {
+      if (quotient === 0) {
+        return `${dividend} \\div ${divisor} = \\boxed{\\frac{${remainder}}{${divisor}}}`;
+      }
+      return `${dividend} \\div ${divisor} = \\boxed{${quotient} \\frac{${remainder}}{${divisor}}}`;
+    }
+    if (quotient === 0) {
+      return `${dividend} \\div ${divisor} =`;
+    }
+    return `${dividend} \\div ${divisor} =`;
   }
 }
 
