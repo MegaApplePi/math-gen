@@ -7,6 +7,7 @@ class MathGen {
   }
 
   private _seed: string;
+  private answersMode: boolean;
 
   public get seed() {
     return this._seed;
@@ -26,11 +27,17 @@ class MathGen {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
     this._seed = urlSearchParams.get("seed")?.substr(0, 16) ?? new Prando().nextString(16);
+    this.answersMode = urlSearchParams.has("answers");
     this._prando = new Prando(this._seed);
   }
 
   public mkAddition(): string {
-    return `${this._prando.nextInt(1, 99)} + ${this._prando.nextInt(1, 99)} =`;
+    let number1 = this._prando.nextInt(1, 99);
+    let number2 = this._prando.nextInt(1, 99);
+    if (this.answersMode) {
+      return `${number1} + ${number2} = \\fcolorbox{#000}{transparent}{${number1 + number2}}`;
+    }
+    return `${number1} + ${number2} =`;
   }
 
   public mkAdditionVertical(): string {
@@ -38,7 +45,12 @@ class MathGen {
   }
 
   public mkSubtraction(): string {
-    return `${this._prando.nextInt(1, 99)} - ${this._prando.nextInt(1, 99)} =`;
+    let number1 = this._prando.nextInt(1, 99);
+    let number2 = this._prando.nextInt(1, 99);
+    if (this.answersMode) {
+      return `${number1} - ${number2} = \\fcolorbox{#000}{transparent}{${number1 - number2}}`;
+    }
+    return `${number1} - ${number2} =`;
   }
 
   public mkSubtractionVertical(): string {
@@ -46,7 +58,23 @@ class MathGen {
   }
 
   public mkMultiplication(): string {
-    return `${this._prando.nextInt(1, 99)} \\times ${this._prando.nextInt(1, 99)} =`;
+    let number1 = this._prando.nextInt(1, 99);
+    let number2 = this._prando.nextInt(1, 99);
+    if (this.answersMode) {
+      return `${number1} \\times ${number2} = \\fcolorbox{#000}{transparent}{${number1 * number2}}`;
+    }
+    return `${number1} \\times ${number2} =`;
+  }
+
+  public mkDivision(): string {
+    let number1 = this._prando.nextInt(1, 99);
+    let number2 = this._prando.nextInt(1, 9);
+    let quotient = number1 * number2;
+
+    if (this.answersMode) {
+      return `${quotient} \\div ${number2} = \\fcolorbox{#000}{transparent}{${number1}}`;
+    }
+    return `${quotient} \\div ${number2} =`;
   }
 }
 

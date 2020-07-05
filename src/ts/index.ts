@@ -6,6 +6,7 @@ const $math = document.querySelector(".math");
 const $seedInput = document.querySelector(".seed__input") as HTMLInputElement;
 const $seedSubmit = document.querySelector(".seed__submit") as HTMLInputElement;
 const $seedRandom = document.querySelector(".seed__random") as HTMLInputElement;
+const $menuAnswers = document.querySelector(".menu__answers") as HTMLInputElement;
 
 $seedInput.value = MathGen.seed;
 
@@ -28,10 +29,19 @@ $seedInput?.addEventListener("keypress", (event) => {
 $seedSubmit?.addEventListener("click", setSeed);
 $seedRandom?.addEventListener("click", setRandomSeed);
 
+function getAnswers() {
+  let urlSearchParams = new URLSearchParams();
+
+  urlSearchParams.set("seed", $seedInput.value);
+  urlSearchParams.append("answers", "");
+  window.location.search = urlSearchParams.toString();
+}
+$menuAnswers?.addEventListener("click", getAnswers);
+
 // Generate random math problems
 let $div: HTMLDivElement;
-for (let i = 0; i < 20; i++) {
-  let thisLine = MathGen.Prando.nextInt(0, 2);
+for (let i = 0; i < 28; i++) {
+  let thisLine = MathGen.Prando.nextInt(0, 3);
   switch (thisLine) {
     case 0:
       $div = document.createElement("div");
@@ -54,7 +64,7 @@ for (let i = 0; i < 20; i++) {
     case 3:
       $div = document.createElement("div");
       $div.classList.add("problem");
-      katex.render(MathGen.mkMultiplication(), $div);
+      katex.render(MathGen.mkDivision(), $div);
       $math?.insertAdjacentElement("beforeend", $div);
       break;
     default:

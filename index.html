@@ -48,8 +48,8 @@
     .problem {
       counter-increment: problemNumber;
       display: inline-flex;
-      margin-bottom: 2.5rem;
-      width: 11rem;
+      margin-bottom: 7.5rem;
+      width: 11.5rem;
       justify-content: flex-start;
       position: relative;
     }
@@ -69,10 +69,11 @@
       position: sticky;
       top: 0;
       z-index: 1;
-      width: 100vw;
+      width: 100%;
       background-color: #999;
       color: #fff;
       padding: 2px 8px;
+      box-sizing: border-box;
     }
 
     @media print {
@@ -85,7 +86,6 @@
 <body class="letter">
   <div class="menu">
     <div>
-      <label>Number of Problems: <input type="number" min="0"/></label>
       <input type="button" class="button menu__answers" value="Answers" />
     </div>
   </div>
