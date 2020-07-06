@@ -46,34 +46,38 @@ function getAnswers() {
 $menuAnswers?.addEventListener("click", getAnswers);
 
 // Generate random math problems
-let $div: HTMLDivElement;
-for (let i = 0; i < 28; i++) {
-  let thisLine = MathGen.Prando.nextInt(0, 4);
-  $div = document.createElement("div");
-  $div.classList.add("problem");
-  if (MathGen.answersMode) {
-    $div.classList.add("problem--answer");
-  }
+function mkMathProblems() {
+  let $div: HTMLDivElement;
+  for (let i = 0; i < 28; i++) {
+    let thisLine = MathGen.Prando.nextInt(0, 4);
+    $div = document.createElement("div");
+    $div.classList.add("problem");
+    if (MathGen.answersMode) {
+      $div.classList.add("problem--answer");
+    }
 
-  switch (thisLine) {
-    case 0:
-      katex.render(MathGen.mkAddition(), $div);
-      break;
-    case 1:
-      katex.render(MathGen.mkSubtraction(), $div);
-      break;
-    case 2:
-      katex.render(MathGen.mkMultiplication(), $div);
-      break;
-    case 3:
-      katex.render(MathGen.mkDivision(), $div);
-      break;
-    case 4:
-      katex.render(MathGen.mkDivisionWithFraction(), $div);
-      break;
-    default:
-      katex.render("???", $div);
-      break;
+    switch (thisLine) {
+      case 0:
+        katex.render(MathGen.mkAddition(), $div);
+        break;
+      case 1:
+        katex.render(MathGen.mkSubtraction(), $div);
+        break;
+      case 2:
+        katex.render(MathGen.mkMultiplication(), $div);
+        break;
+      case 3:
+        katex.render(MathGen.mkDivision(), $div);
+        break;
+      case 4:
+        katex.render(MathGen.mkDivisionWithFraction(), $div);
+        break;
+      default:
+        katex.render("SKIP", $div);
+        break;
+    }
+    $math?.insertAdjacentElement("beforeend", $div);
   }
-  $math?.insertAdjacentElement("beforeend", $div);
 }
+// TODO make the builder/customizer dialog, run this function once they are ready to generate the problems
+mkMathProblems();
