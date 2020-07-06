@@ -27,7 +27,7 @@
       top: 2.5mm;
       font-size: 0.8rem;
     }
-    .seed__input {
+    .input-text {
       appearance: none;
       border: none;
       border-bottom: 1px solid #000;
@@ -79,27 +79,40 @@
       box-sizing: border-box;
     }
 
+    .dialog {
+      display: none;
+    }
+
     @media print {
-      .seed__submit, .seed__random, .menu {
+      .noprint {
         display: none;
       }
     }
   </style>
 </head>
 <body class="letter">
-  <div class="menu">
+  <div class="noprint menu">
     <div>
       <input type="button" class="button menu__answers" value="Answers" />
     </div>
   </div>
+  <div class="noprint dialog">
+    <h2>What is the "KEY"?</h2>
+    <p>The KEY is like the SEED, expect the KEY will not be printed. You will need to remember the KEY, should you need to generate this exact set of problems again.</p>
+    <p>Note: This site will not retain the KEY.</p>
+  </div>
   <section class="page sheet padding-10mm">
     <div class="seed">
+      <label class="noprint">
+        <span>KEY:</span>
+        <input type="text" class="input-text seed__key" />
+      </label>
       <label>
         <span>SEED:</span>
-        <input type="text" class="seed__input" maxlength="16" />
-        <input type="button" class="button seed__submit" value="Set Seed" />
-        <input type="button" class="button seed__random" value="Random Seed" />
+        <input type="text" class="input-text seed__generator" maxlength="16" />
       </label>
+      <input type="button" class="button noprint seed__submit" value="Set Seed" />
+      <input type="button" class="button noprint seed__random" value="Random Seed" />
     </div>
     <div class="instructions">Write any remainders as a fraction.</div>
     <div class="math"></div>

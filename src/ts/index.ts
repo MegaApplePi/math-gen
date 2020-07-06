@@ -3,25 +3,31 @@ import * as katex from "katex";
 
 const $page = document.querySelector(".page");
 const $math = document.querySelector(".math");
-const $seedInput = document.querySelector(".seed__input") as HTMLInputElement;
+const $seedKey = document.querySelector(".seed__key") as HTMLInputElement;
+const $seedGenerator = document.querySelector(".seed__generator") as HTMLInputElement;
 const $seedSubmit = document.querySelector(".seed__submit") as HTMLInputElement;
 const $seedRandom = document.querySelector(".seed__random") as HTMLInputElement;
 const $menuAnswers = document.querySelector(".menu__answers") as HTMLInputElement;
 
-$seedInput.value = MathGen.seed;
+$seedGenerator.value = MathGen.seed;
+$seedKey.value = MathGen.key;
 
 function setSeed() {
   let urlSearchParams = new URLSearchParams();
 
-  urlSearchParams.set("seed", $seedInput.value);
+  urlSearchParams.set("key", $seedKey.value);
+  urlSearchParams.set("seed", $seedGenerator.value);
   window.location.search = urlSearchParams.toString();
 }
 
 function setRandomSeed() {
-  window.location.search = "";
+  let urlSearchParams = new URLSearchParams();
+
+  urlSearchParams.set("key", $seedKey.value);
+  window.location.search = urlSearchParams.toString();
 }
 
-$seedInput?.addEventListener("keypress", (event) => {
+$seedGenerator?.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
     setSeed();
   }
@@ -32,8 +38,9 @@ $seedRandom?.addEventListener("click", setRandomSeed);
 function getAnswers() {
   let urlSearchParams = new URLSearchParams();
 
-  urlSearchParams.set("seed", $seedInput.value);
-  urlSearchParams.append("answers", "");
+  urlSearchParams.set("key", $seedKey.value);
+  urlSearchParams.set("seed", $seedGenerator.value);
+  urlSearchParams.set("answers", "");
   window.location.search = urlSearchParams.toString();
 }
 $menuAnswers?.addEventListener("click", getAnswers);

@@ -6,6 +6,9 @@ class MathGen {
     return this._prando;
   }
 
+  // To prevent cheating, the key acts like a salt.
+  // The key is private (not printable), while the seed is public (will print).
+  private _key: string;
   private _seed: string;
   private _answersMode: boolean;
   public get answersMode(): boolean {
@@ -25,21 +28,33 @@ class MathGen {
       throw new Error("The seed was already set. It cannot be set again.");
     }
   };
+  public get key() {
+    return this._key;
+  };
+  public set key(key: string) {
+    if (!this._key) {
+      this._key = key;
+    } else {
+      throw new Error("The key was already set. It cannot be set again.");
+    }
+  };
 
   constructor() {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
+    this._key = urlSearchParams.get("key") ?? new Prando().nextString(8);
     this._seed = urlSearchParams.get("seed")?.substr(0, 16) ?? new Prando().nextString(16);
     this._answersMode = urlSearchParams.has("answers");
-    this._prando = new Prando(this._seed);
+
+    this._prando = new Prando(this._key + this._seed);
   }
 
   public mkAddition(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this._answersMode) {
+    if (this._answersMode)
       return `${number1} + ${number2} = \\boxed{${number1 + number2}}`;
-    }
+
     return `${number1} + ${number2} =`;
   }
 
@@ -50,9 +65,9 @@ class MathGen {
   public mkSubtraction(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this._answersMode) {
+    if (this._answersMode)
       return `${number1} - ${number2} = \\boxed{${number1 - number2}}`;
-    }
+
     return `${number1} - ${number2} =`;
   }
 
@@ -63,9 +78,9 @@ class MathGen {
   public mkMultiplication(): string {
     let number1 = this._prando.nextInt(1, 99);
     let number2 = this._prando.nextInt(1, 99);
-    if (this._answersMode) {
+    if (this._answersMode)
       return `${number1} \\times ${number2} = \\boxed{${number1 * number2}}`;
-    }
+
     return `${number1} \\times ${number2} =`;
   }
 
@@ -74,9 +89,9 @@ class MathGen {
     let divisor = this._prando.nextInt(1, 10);
     let dividend = quotient * divisor;
 
-    if (this._answersMode) {
+    if (this._answersMode)
       return `${dividend} \\div ${divisor} = \\boxed{${quotient}}`;
-    }
+
     return `${dividend} \\div ${divisor} =`;
   }
 
@@ -87,13 +102,13 @@ class MathGen {
     let remainder = dividend % divisor;
 
     if (this._answersMode) {
-      if (quotient === 0) {
+      if (remainder === 0)
+        return `${dividend} \\div ${divisor} = \\boxed{${quotient}}`;
+
+      if (quotient === 0)
         return `${dividend} \\div ${divisor} = \\boxed{\\frac{${remainder}}{${divisor}}}`;
-      }
+
       return `${dividend} \\div ${divisor} = \\boxed{${quotient} \\frac{${remainder}}{${divisor}}}`;
-    }
-    if (quotient === 0) {
-      return `${dividend} \\div ${divisor} =`;
     }
     return `${dividend} \\div ${divisor} =`;
   }
