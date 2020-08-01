@@ -70,10 +70,10 @@ function mkMathProblems() {
         katex.render(MathGen.mkDivision(), $div);
         break;
       case 4:
-        katex.render(MathGen.mkDivisionWithFraction(), $div);
+        katex.render(MathGen.mkDivisionWithRemainder(), $div);
         break;
       default:
-        katex.render("SKIP", $div);
+        $div.textContent = "SKIP";
         break;
     }
     $math?.insertAdjacentElement("beforeend", $div);

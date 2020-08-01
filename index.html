@@ -69,10 +69,10 @@
       justify-content: flex-start;
     }
     .menu {
-      position: sticky;
+      position: fixed;
       top: 0;
       z-index: 1;
-      width: 100%;
+      width: 20%;
       background-color: #999;
       color: #fff;
       padding: 2px 8px;
@@ -92,6 +92,29 @@
 </head>
 <body class="letter">
   <div class="noprint menu">
+    <div class="config">
+      <div class="config__group">
+        <input type="checkbox" id="q-addition" />
+        <label for="q-addition">Addition</label>
+      </div>
+      <div class="config__group">
+        <input type="checkbox" id="q-subtraction" />
+        <label for="q-subtraction">Subtraction</label>
+      </div>
+      <div class="config__group">
+        <input type="checkbox" id="q-multiplication" />
+        <label for="q-multiplication">Multiplication</label>
+      </div>
+      <div class="config__group">
+        <input type="checkbox" id="q-division" />
+        <label for="q-division">Division</label>
+      </div>
+      <div class="config__group">
+        <input type="checkbox" id="q-division-remainder" />
+        <label for="q-division-remainder">Division (w/ Remainders)</label>
+      </div>
+      <input type="button" class="button config__submit" value="Confirm" />
+    </div>
     <div>
       <input type="button" class="button menu__answers" value="Answers" />
     </div>

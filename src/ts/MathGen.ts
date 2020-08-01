@@ -95,7 +95,7 @@ class MathGen {
     return `${dividend} \\div ${divisor} =`;
   }
 
-  public mkDivisionWithFraction(): string {
+  public mkDivisionWithRemainder(): string {
     let dividend = this._prando.nextInt(1, 99);
     let divisor = this._prando.nextInt(1, 99);
     let quotient = Math.floor(dividend / divisor);
