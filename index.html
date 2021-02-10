@@ -76,13 +76,30 @@
       padding: 1%;
       background-color: #E0F2F1;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     .config {
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
+      flex-grow: 1;
     }
     .config label {
       margin-bottom: 0.5rem;
+    }
+    .config__section {
+      display: flex;
+      flex-direction: column;
+    }
+    /* .config__legend {
+      position: sticky;
+      top: 0;
+      background-color: #E0F2F1;
+    } */
+
+    .config-number {
+      width: 8ch;
     }
 
     .dialog {
@@ -105,11 +122,6 @@
   </style>
 </head>
 <body class="letter">
-  <div class="noprint dialog">
-    <h2>What is the "KEY"?</h2>
-    <p>The KEY is like the SEED, expect the KEY will not be printed. You will need to remember the KEY, should you need to generate this exact set of problems again.</p>
-    <p>Note: This site will not retain the KEY.</p>
-  </div>
   <div class="paper-container">
     <section class="page sheet padding-15mm">
       <div class="seed">
@@ -123,71 +135,353 @@
         </label>
         <label>
           <span>CONFIG:</span>
-          <input type="text" class="input-text" id="parameters" maxlength="16" pattern="[0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0-z][0,1][0-z][0,1]"/>
+          <!-- <input type="text" class="input-text" id="parameters" maxlength="16" pattern="[0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0-z][0,1][0-z][0,1]"/> -->
+          <input type="text" class="input-text" id="parameters" maxlength="16"/>
         </label>
       </div>
       <!-- <div class="instructions">Write any remainders as a fraction.</div> -->
       <div class="math" id="math"></div>
     </section>
     <div class="menu noprint">
-      <input type="button" class="button" id="seed-submit" value="Set Seed" />
-      <input type="button" class="button" id="seed-random" value="Random Seed" />
-      <hr/>
-      <input type="button" class="button" id="answers" value="Answers" />
-      <hr/>
+      <div>
+        <input type="button" class="button" id="seed-submit" value="Set Seed" />
+        <input type="button" class="button" id="seed-random" value="Random Seed" />
+        <hr/>
+        <input type="button" class="button" id="answers" value="Answers" />
+        <input type="button" class="button" id="no-answers" value="No Answers" />
+        <hr/>
+      </div>
       <div class="config">
-        <label>
-          <input type="checkbox" class="config-item config-checkbox" id="conf-addition" checked/>
-          <span>Addition</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-addition-vertical" checked/>
-          <span>Use vertical format</span>
-        </label>
-        <label>
-          <input type="checkbox" class="config-item config-checkbox" id="conf-subtraction" checked/>
-          <span>Subtraction</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-subtraction-vertical" checked/>
-          <span>Use vertical format</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-subtraction-negatives" checked/>
-          <span>Allow negative differences</span>
-        </label>
-        <label>
-          <input type="checkbox" class="config-item config-checkbox" id="conf-multiplication" checked/>
-          <span>Multiplication</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-subtraction-vertical" checked/>
-          <span>Use vertical format</span>
-        </label>
-        <label>
-          <input type="checkbox" class="config-item config-checkbox" id="conf-division" checked/>
-          <span>Division</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-division" checked/>
-          <span>Use long division format</span>
-        </label>
-        <label>
-          <input type="checkbox" class="config-item config-checkbox" id="conf-division-frac" checked/>
-          <span>Division, with fractional answers</span>
-        </label>
-        <label style="margin-left: 2rem;">
-          <input type="checkbox" class="config-item config-checkbox" id="conf-division-frac" checked/>
-          <span>Use long division format</span>
-        </label>
-        <label>
-          <span>Min number:</span>
-          <input type="number" class="config-item config-number" id="conf-min-number" min="-35" max="35" value="1"/>
-        </label>
-        <label>
-          <span>Max number:</span>
-          <input type="number" class="config-item config-number" id="conf-max-number" min="-35" max="35" value="35"/>
-        </label>
+        <fieldset class="config__section">
+          <legend class="config__legend">Addition</legend>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-basic" checked/>
+            <span>Basic</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-basic-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-basic-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-basic-max" min="-35" max="35" value="35"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-deci" checked/>
+            <span>Decimals</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-deci-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-deci-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-deci-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max Place Values:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-deci-placevals" min="0" max="9" value="0"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-frac" checked/>
+            <span>Fractions</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-frac-numer-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-frac-numer-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-frac-denom-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-addi-frac-denom-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-addi-frac-denom-same" checked/>
+            <span>Force same denominator</span>
+          </label>
+        </fieldset>
+        <fieldset class="config__section">
+          <legend class="config__legend">Subtraction</legend>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-basic" checked/>
+            <span>Basic</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-basic-negatives" checked/>
+            <span>Allow negative differences</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-basic-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-basic-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-basic-max" min="-35" max="35" value="35"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-deci" checked/>
+            <span>Decimals</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-deci-negatives" checked/>
+            <span>Allow negative differences</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-deci-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-deci-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-deci-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max Place Values:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-deci-placevals" min="0" max="9" value="0"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-frac" checked/>
+            <span>Fractions</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-frac-negatives" checked/>
+            <span>Allow negative differences</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-frac-numer-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-frac-numer-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-frac-denom-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-subt-frac-denom-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-frac-denom-same" checked/>
+            <span>Force same denominator</span>
+          </label>
+        </fieldset>
+        <fieldset class="config__section">
+          <legend class="config__legend">Multiplication</legend>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-mult-basic" checked/>
+            <span>Basic</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-mult-basic-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-basic-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-basic-max" min="-35" max="35" value="35"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-mult-deci" checked/>
+            <span>Decimals</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-mult-deci-vert" checked/>
+            <span>Use vertical format</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Min:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-deci-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-deci-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max Place Values:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-deci-placevals" min="0" max="9" value="0"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-mult-frac" checked/>
+            <span>Fractions</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-frac-numer-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-frac-numer-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-frac-denom-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-mult-frac-denom-max" min="-35" max="35" value="35"/>
+          </label>
+        </fieldset>
+        <fieldset class="config__section">
+          <legend class="config__legend">Division</legend>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-divi-basic" checked/>
+            <span>Basic</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-subt-basic-remainders" checked/>
+            <span>Allow remainders</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-basic-divisor-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-basic-divisor-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-basic-quotient-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-basic-quotient-max" min="-35" max="35" value="35"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-divi-deci" checked/>
+            <span>Decimals</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-divi-deci-decimal-divisor" checked/>
+            <span>Allow decimal divisor</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-deci-divisor-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-deci-divisor-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-deci-quotient-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-deci-quotient-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max Place Values:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-deci-placevals" min="0" max="9" value="0"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-divi-frac" checked/>
+            <span>Fractions</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-frac-numer-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Numerator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-frac-numer-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Min:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-frac-denom-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Denominator Max:</span>
+            <input type="number" class="config-item config-number" id="conf-divi-frac-denom-max" min="-35" max="35" value="35"/>
+          </label>
+        </fieldset>
+        <fieldset class="config__section">
+          <legend class="config__legend">Long Division</legend>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-long-basic" checked/>
+            <span>Basic</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-long-basic-remainders" checked/>
+            <span>Allow remainders</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Min:</span>
+            <input type="number" class="config-item config-number" id="conf-long-basic-divisor-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Max:</span>
+            <input type="number" class="config-item config-number" id="conf-long-basic-divisor-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Min:</span>
+            <input type="number" class="config-item config-number" id="conf-long-basic-quotient-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Max:</span>
+            <input type="number" class="config-item config-number" id="conf-long-basic-quotient-max" min="-35" max="35" value="35"/>
+          </label>
+          <label>
+            <input type="checkbox" class="config-item config-checkbox" id="conf-long-deci" checked/>
+            <span>Decimals</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <input type="checkbox" class="config-item config-checkbox" id="conf-long-deci-decimal-divisor" checked/>
+            <span>Allow decimal divisor</span>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Min:</span>
+            <input type="number" class="config-item config-number" id="conf-long-deci-divisor-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Divisor Max:</span>
+            <input type="number" class="config-item config-number" id="conf-long-deci-divisor-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Min:</span>
+            <input type="number" class="config-item config-number" id="conf-long-deci-quotient-min" min="-35" max="35" value="1"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Quotient Max:</span>
+            <input type="number" class="config-item config-number" id="conf-long-deci-quotient-max" min="-35" max="35" value="35"/>
+          </label>
+          <label style="margin-left: 2rem;">
+            <span class="config__label">Max Place Values:</span>
+            <input type="number" class="config-item config-number" id="conf-long-deci-placevals" min="0" max="9" value="0"/>
+          </label>
+        </fieldset>
+      </div>
+      <div>
+        <hr/>
         <input type="button" class="button" id="parameters-submit" value="Set Parameters" />
       </div>
     </div>
