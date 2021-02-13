@@ -6,7 +6,8 @@
     "removeComments": true,
     "sourceMap": true,
     "outDir": "dist/js",
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
   "include": [
       "src/ts/**/*"

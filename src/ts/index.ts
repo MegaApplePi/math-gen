@@ -1,5 +1,6 @@
 import Prando from 'prando';
 import MathGen from './MathGen';
+import LZString from 'lz-string';
 
 class App {
   private MathGen: MathGen;
@@ -15,12 +16,12 @@ class App {
   private readonly $parametersSubmit: HTMLInputElement = document.getElementById("parameters-submit") as HTMLInputElement;
   private readonly $$configItem: HTMLInputElement[] = [...document.getElementsByClassName("config-item")] as HTMLInputElement[];
 
-  private readonly DEFAULT_PARAMETERS: string = "0000z00000z020110z010z0000000z000000z0200010z010z000010z00010z020010z050z00010z040b00010z010z020010z010z00010z010z00010z010z020";
-  private readonly PARAMTERS_REGEX_TEST: RegExp = /[0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0,1][0-z][0,1][0-z][0,1]/;
+  private readonly DEFAULT_PARAMETERS: string = "AwkRjYE5knLraT7IWjrWJ5l/0sC9cg==";
 
   // TODO define an interface for configFlags
   private configs: Map<string, number> = new Map();
   private configFlags: any[] = [];
+  private configFinal: string = "";
   private answersMode: boolean;
 
   constructor() {
@@ -32,10 +33,6 @@ class App {
 
     this.answersMode = urlSearchParams.has("answers") ?? false;
 
-    // if(!this.PARAMTERS_REGEX_TEST.test(this.$parameters.value)) {
-    //   this.$parameters.value = this.DEFAULT_PARAMETERS;
-    // }
-
     this.MathGen = new MathGen(this.$seedKey.value, this.$seedGenerator.value);
 
     this.readConfig();
@@ -43,21 +40,33 @@ class App {
   }
 
   private readConfig() {
-    let parameters = this.$parameters.value;
+    let parameters = LZString.decompressFromBase64(this.$parameters.value);
+    let numberParameters = parameters?.substr(6);
     let index = 0;
+
+    // NOTE This is a bitwise number
+    let checkBoxParameters = parseInt(parameters?.substr(0, 6) ?? "", 36);
+    let checkboxNumber = 0;
 
     this.$$configItem.forEach((value: HTMLInputElement) => {
       switch(value.type) {
         case "checkbox":
-          value.checked = parameters[index] === "1" ? true : false;
-          this.configs.set(value.id, parameters[index] === "1" ? 1 : 0);
-          index++;
+          if (checkBoxParameters >> checkboxNumber & 1) {
+            value.checked = true;
+            this.configs.set(value.id, 1);
+          } else {
+            value.checked = false;
+            this.configs.set(value.id, 0);
+          }
+
+          checkboxNumber++;
           break;
         case "number":
-          let number = parseInt(parameters[index], 36);
+          let number = parseInt(numberParameters?.charAt(index) ?? "", 36);
           index++;
 
-          if (parameters[index] === "1") {
+          // the character after determines the sign
+          if (numberParameters?.charAt(index) === "1") {
             number *= -1;
           }
           index++;
@@ -112,17 +121,20 @@ class App {
     window.location.search = urlSearchParams.toString();
   }
 
-  private updateConfig() {
-    this.$parameters.value = this.configFlags.join("");
-  }
-
   private configItem_change() {
     this.configFlags = [];
+
+    // This is a bitwise number
+    let checkBoxes = 0;
+    let checkboxNumber = 0;
 
     this.$$configItem.forEach((value: HTMLInputElement) => {
       switch(value.type) {
         case "checkbox":
-          this.configFlags.push(value.checked ? 1 : 0);
+          if (value.checked) {
+            checkBoxes |= 1 << checkboxNumber;
+          }
+          checkboxNumber++
           break;
         case "number":
           if (isNaN(parseInt(value.value))) {
@@ -150,13 +162,14 @@ class App {
       }
     });
 
-    this.updateConfig();
+    this.configFinal = LZString.compressToBase64(checkBoxes.toString(36).padStart(6, "0") + this.configFlags.join(""));
+    this.$parameters.value = this.configFinal;
   }
 
   private setParameters() {
     this.configItem_change();
     let urlSearchParams = new URLSearchParams(window.location.search);
-    urlSearchParams.set("parameters", this.configFlags.join(""));
+    urlSearchParams.set("parameters", this.configFinal);
     window.location.search = urlSearchParams.toString();
   }
 
